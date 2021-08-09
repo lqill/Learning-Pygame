@@ -1,7 +1,3 @@
-import pygame
-import pygame.freetype
-import pygame.font
-
 FONT, FONTSIZE = "Assets/UniversCondensed.ttf", 65
 SIZE = WIDTH, HEIGHT = 1000, 750
 
@@ -14,7 +10,7 @@ up = -25
 down = 25
 
 # FPS
-FPS = 60
+FPS = 10
 frames = int(FPS / 4)
 
 # Assets
@@ -31,12 +27,3 @@ TEXTURES = {
     air: "Assets/isometric-nature-pack/air.png",
     cursor: "Assets/isometric-nature-pack/cursor{}.png"
 }
-
-# job
-mage = 1
-healer = 2
-thief = 3
-warrior = 4
-skeleton = 5
-goblin = 6
-slime = 7

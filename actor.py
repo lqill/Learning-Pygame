@@ -1,9 +1,11 @@
 import random
 from pandas import ExcelFile
+from player import Player
 
 
-class Actor:
-    def __init__(self, name: str, species: str, level: int) -> None:
+class Actor(Player):
+    def __init__(self, name: str, job: str, level: int) -> None:
+        super().__init__(job=job)
         self.randomizer = random.Random(1)
         self.dead = False
         self.exp = 0
@@ -11,16 +13,16 @@ class Actor:
         self.name = name
         self.x = 0
         self.y = 0
-        self.species = species
+        self.job = job
         self.level = 0
-        with ExcelFile("base_stats.xlsx") as xls:
-            df = xls.parse(xls.sheet_names[0], index_col="SPECIES")
-            self.stats = df.loc[self.species].to_dict()
+        with ExcelFile("Assets/base_stats.xlsx") as xls:
+            df = xls.parse(xls.sheet_names[0], index_col="job")
+            self.stats = df.loc[self.job].to_dict()
             self.stats.pop("TOTAL")
             # print(df)
-        with ExcelFile("stats_multiplier.xlsx") as xls:
-            df = xls.parse(xls.sheet_names[0], index_col="SPECIES")
-            self.multiplier = df.loc[self.species].to_dict()
+        with ExcelFile("Assets/stats_multiplier.xlsx") as xls:
+            df = xls.parse(xls.sheet_names[0], index_col="job")
+            self.multiplier = df.loc[self.job].to_dict()
             self.multiplier.pop("TOTAL")
         self.stats["HP"] = self.stats.get("MAX_HP")
         self.stats["MP"] = self.stats.get("MAX_MP")
@@ -29,13 +31,13 @@ class Actor:
                        self.randomizer.randint(0, (self.next_exp/2)-1))
 
     @classmethod
-    def randomize(cls, names: str = None, species: str = None, level: int = 0):
+    def randomize(cls, names: str = None, job: str = None, level: int = 0):
         r = random.Random()
         if names == None:
             names = ["Dave", "Jack", "Graze", "Lucas", "Philips"]
-        if species == None:
-            species = ["human", "elf", "fishman"]
-        return cls(r.choice(names), r.choice(species), r.randint(level, level+2))
+        if job == None:
+            job = ["warrior", "thief", "mage", "healer"]
+        return cls(r.choice(names), r.choice(job), r.randint(level, level+2))
 
     def level_up(self, levels: int = 1):
         self.level += levels
@@ -61,7 +63,7 @@ class Actor:
 
     def status(self):
         print(
-            f'Name\t: {self.name}\nSpecies\t: {self.species}\nLevel\t: {self.level}\nEXP\t: {self.exp}/{self.next_exp}\nHP\t: {self.stats["HP"]}/{self.stats["MAX_HP"]}\nMP\t: {self.stats["MP"]}/{self.stats["MAX_MP"]}\nSTR\t: {self.stats["STR"]}\nDEF\t: {self.stats["DEF"]}\nINT\t: {self.stats["INT"]}\nRES\t: {self.stats["RES"]}\nAGI\t: {self.stats["AGI"]}\nLUC\t: {self.stats["LUC"]}\n')
+            f'Name\t: {self.name}\njob\t: {self.job}\nLevel\t: {self.level}\nEXP\t: {self.exp}/{self.next_exp}\nHP\t: {self.stats["HP"]}/{self.stats["MAX_HP"]}\nMP\t: {self.stats["MP"]}/{self.stats["MAX_MP"]}\nSTR\t: {self.stats["STR"]}\nDEF\t: {self.stats["DEF"]}\nINT\t: {self.stats["INT"]}\nRES\t: {self.stats["RES"]}\nAGI\t: {self.stats["AGI"]}\nLUC\t: {self.stats["LUC"]}\n')
 
     def wait(self):
         pass
