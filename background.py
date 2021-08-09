@@ -1,0 +1,27 @@
+import pygame
+import pygame.sprite
+from spritesheet import SpriteStripAnim as ssAnim
+from constant import *
+
+
+class Background(pygame.Surface):
+    def __init__(self, size: tuple):
+        self.background = pygame.Surface(size)
+        # self.background.fill(pygame.Color("#f0f0f0"))
+        self.bg_image = pygame.image.load(
+            "Assets/handpainted_07.png")
+        self.bg_pos = self.bg_image.get_rect()
+        self.background.blit(self.bg_image, self.bg_pos)
+        self.bg_turn = True
+
+    def render(self):
+        if self.bg_turn:
+            self.bg_pos = self.bg_pos.move(-1, -1)
+            if self.bg_pos.bottom < HEIGHT:
+                self.bg_turn = False
+        else:
+            self.bg_pos = self.bg_pos.move(1, 1)
+            if self.bg_pos.left > 0:
+                self.bg_turn = True
+        self.background.blit(self.bg_image, self.bg_pos)
+        return self.background
