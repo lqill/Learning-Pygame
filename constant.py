@@ -1,5 +1,7 @@
 FONT, FONTSIZE = "Assets/UniversCondensed.ttf", 65
-SIZE = WIDTH, HEIGHT = 1000, 750
+SIZE = WIDTH, HEIGHT = 800, 600
+
+offset = (0, 0)
 
 
 # direction  beacause the tiles is 128x50

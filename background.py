@@ -14,7 +14,7 @@ class Background(pygame.Surface):
         self.background.blit(self.bg_image, self.bg_pos)
         self.bg_turn = True
 
-    def render(self):
+    def render(self, window_surface: pygame.Surface):
         if self.bg_turn:
             self.bg_pos = self.bg_pos.move(-1, -1)
             if self.bg_pos.bottom < HEIGHT:
@@ -24,4 +24,4 @@ class Background(pygame.Surface):
             if self.bg_pos.left > 0:
                 self.bg_turn = True
         self.background.blit(self.bg_image, self.bg_pos)
-        return self.background
+        window_surface.blit(self.background, (0, 0))
