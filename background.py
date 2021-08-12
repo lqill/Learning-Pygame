@@ -1,15 +1,14 @@
 import pygame
 import pygame.sprite
 from spritesheet import SpriteStripAnim as ssAnim
-from constant import *
+from constant import HEIGHT
 
 
 class Background(pygame.Surface):
-    def __init__(self, size: tuple):
+    def __init__(self, size: tuple, image: str):
         self.background = pygame.Surface(size)
         # self.background.fill(pygame.Color("#f0f0f0"))
-        self.bg_image = pygame.image.load(
-            "Assets/handpainted_07.png")
+        self.bg_image = pygame.image.load(image)
         self.bg_pos = self.bg_image.get_rect()
         self.background.blit(self.bg_image, self.bg_pos)
         self.bg_turn = True

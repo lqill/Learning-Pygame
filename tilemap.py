@@ -3,7 +3,7 @@ import pygame.display
 import pygame.sprite
 import pygame.transform
 import pygame.image
-from constant import *
+from constant import TEXTURES, right, down, g, d, s, a
 import random as r
 
 

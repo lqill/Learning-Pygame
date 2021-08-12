@@ -1,4 +1,7 @@
-FONT, FONTSIZE = "Assets/UniversCondensed.ttf", 65
+FONT = "Assets/joystix monospace.ttf"
+FSIZE_S=16
+FSIZE_M=32
+FSIZE_L=64
 SIZE = WIDTH, HEIGHT = 800, 600
 
 offset = (0, 0)

@@ -1,7 +1,7 @@
 import pygame
 import pygame.sprite
 from spritesheet import SpriteStripAnim as ssAnim
-from constant import *
+from constant import frames
 
 # joblist
 joblist = {
