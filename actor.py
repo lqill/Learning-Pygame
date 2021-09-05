@@ -19,13 +19,24 @@ class Actor(Player):
             df = xls.parse(xls.sheet_names[0], index_col="job")
             self.stats = df.loc[self.job].to_dict()
             self.stats.pop("TOTAL")
-            # print(df)
+            '''
+            HP/MAX_HP
+            MP/MAX_MP
+            STR
+            DEF
+            INT
+            RES
+            AGI
+            LUC
+            '''
         with ExcelFile("Assets/stats_multiplier.xlsx") as xls:
             df = xls.parse(xls.sheet_names[0], index_col="job")
             self.multiplier = df.loc[self.job].to_dict()
             self.multiplier.pop("TOTAL")
         self.stats["HP"] = self.stats.get("MAX_HP")
         self.stats["MP"] = self.stats.get("MAX_MP")
+        # Test stats MOV
+        self.stats["MOV"] = 4
         self.level_up(level)
         self.exp = int((self.next_exp/2) +
                        self.randomizer.randint(0, (self.next_exp/2)-1))

@@ -14,7 +14,7 @@ right = 63
 up = -25
 down = 25
 
-# FPS
+# FPS setiap 10 frame satu detik
 FPS = 10
 frames = int(FPS / 4)
 
