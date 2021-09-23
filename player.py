@@ -1,7 +1,8 @@
 import pygame
 import pygame.sprite
 from spritesheet import SpriteStripAnim as ssAnim
-from constant import frames
+from constant import FPS, frames
+import math
 
 # joblist
 joblist = {
@@ -24,15 +25,15 @@ class Player(pygame.sprite.Sprite):
         self.n = 0
         self.images[self.n].iter()
         self.render()
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect() 
 
     def render(self, window_surface: pygame.Surface = None):
-        self.n += 1
+        self.n +=6/FPS
         if self.n >= len(self.images):
             self.n = 0
             if self.state != "idle":
-                self.switch_animation("idle")
-        self.image = self.images[self.n].next()
+                self.switch_animation("idle") 
+        self.image = self.images[math.floor(self.n)].next()
         self.size = self.image.get_rect()[2:]
         self.size = (self.size[0]*6, self.size[1]*6)
         self.image = pygame.transform.scale(self.image, self.size)

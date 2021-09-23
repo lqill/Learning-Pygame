@@ -1,7 +1,7 @@
 import pygame
 import pygame.sprite
 from spritesheet import SpriteStripAnim as ssAnim
-from constant import HEIGHT
+from constant import FPS, HEIGHT
 
 
 class Background(pygame.Surface):
@@ -12,15 +12,20 @@ class Background(pygame.Surface):
         self.bg_pos = self.bg_image.get_rect()
         self.background.blit(self.bg_image, self.bg_pos)
         self.bg_turn = True
+        self.speed=0
+        
 
     def render(self, window_surface: pygame.Surface):
-        if self.bg_turn:
-            self.bg_pos = self.bg_pos.move(-1, -1)
-            if self.bg_pos.bottom < HEIGHT:
-                self.bg_turn = False
-        else:
-            self.bg_pos = self.bg_pos.move(1, 1)
-            if self.bg_pos.left > 0:
-                self.bg_turn = True
+        if self.speed >= FPS/12:
+            if self.bg_turn:
+                self.bg_pos = self.bg_pos.move(-1, -1)
+                if self.bg_pos.bottom < HEIGHT:
+                    self.bg_turn = False
+            else:
+                self.bg_pos = self.bg_pos.move(1, 1)
+                if self.bg_pos.left > 0:
+                    self.bg_turn = True
+            self.speed=0
+        self.speed+=1
         self.background.blit(self.bg_image, self.bg_pos)
         window_surface.blit(self.background, (0, 0))

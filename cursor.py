@@ -1,7 +1,8 @@
+import math
 import pygame
 import pygame.sprite
 from spritesheet import SpriteStripAnim as ssAnim
-from constant import TEXTURES, cursor, frames, right, left, up, down, WIDTH, HEIGHT, a
+from constant import FPS, TEXTURES, cursor, frames, right, left, up, down, WIDTH, HEIGHT, a
 
 
 class Cursor(pygame.sprite.Sprite):
@@ -34,10 +35,10 @@ class Cursor(pygame.sprite.Sprite):
         print("grid", self.grid_pos)
 
     def render(self, window_surface: pygame.Surface):
-        self.n += 1
+        self.n += 6/FPS
         if self.n >= len(self.images):
             self.n = 0
-        self.image = self.images[self.n].next()
+        self.image = self.images[math.floor(self.n)].next()
         window_surface.blit(self.image, self.pos)
 
     def move(self, dirX: int, dirY: int):
@@ -59,7 +60,33 @@ class Cursor(pygame.sprite.Sprite):
             if self.tile_map[self.grid_pos[0]+dx][self.grid_pos[1]+dy] == a:
                 pass
                 print("air", self.grid_pos,
-                      self.grid_pos[0]+dy, self.grid_pos[1]+dx)
+                      self.grid_pos[0]+dx, self.grid_pos[1]+dy)
+                xnew = dx
+                ynew = dy
+                while True:
+                    try:
+                        xnew += dx
+                        ynew += dy
+                        if self.grid_pos[0] + xnew< 0 or self.grid_pos[1]+ynew < 0:
+                            raise IndexError
+                        posisi_selanjutnya = self.tile_map[self.grid_pos[0] +
+                                                           xnew][self.grid_pos[1]+ynew]
+                        if posisi_selanjutnya != a:
+                            print("bisa")
+                            dx = xnew
+                            dy = ynew
+                            self.grid_pos[0] += dx
+                            self.grid_pos[1] += dy
+                            for i in range(abs(dx)):
+                                self.pos = self.pos.move(dirX, dirY)
+                            for i in range(abs(dy)):
+                                self.pos = self.pos.move(dirX, dirY)
+
+                            print(self.grid_pos)
+                            break
+                    except IndexError as e:
+                        print(e)
+                        break
             else:
                 self.pos = self.pos.move(dirX, dirY)
                 self.grid_pos[0] += dx

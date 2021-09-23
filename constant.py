@@ -14,8 +14,8 @@ right = 63
 up = -25
 down = 25
 
-# FPS setiap 10 frame satu detik
-FPS = 10
+# FPS setiap 24 frame satu detik
+FPS = 60
 frames = int(FPS / 4)
 
 # Assets

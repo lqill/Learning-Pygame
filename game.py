@@ -1,6 +1,6 @@
 import pygame
-from pygame.constants import K_p
 import pygame.font
+import pygame.mixer
 import pygame.draw
 import pygame.transform
 import pygame.sprite
@@ -8,7 +8,6 @@ import pygame.image
 import pygame.time
 import pygame.event
 import pygame.display
-# import pygame_gui
 from background import Background
 from constant import FONT, FSIZE_L, FSIZE_M, FSIZE_S, WIDTH, HEIGHT, up, down, left, right, g, d, a, s, FPS
 from cursor import Cursor
@@ -18,54 +17,71 @@ from actor import Actor
 
 class Map:
     def __init__(self, maps: list) -> None:
+
+        # [Init]
         pygame.init()
         self.SIZE = self.WIDTH, self.HEIGHT = WIDTH, HEIGHT
+        self.window_surface = pygame.display.set_mode(self.SIZE)
         self.fontS = pygame.font.SysFont(FONT, FSIZE_S)
         self.fontM = pygame.font.SysFont(FONT, FSIZE_M)
         self.fontL = pygame.font.SysFont(FONT, FSIZE_L)
         pygame.display.set_caption('Isometric')
-        self.window_surface = pygame.display.set_mode(self.SIZE)
-        # self.ui_manager = pygame_gui.UIManager(self.SIZE)
         self.clock = pygame.time.Clock()
         self.running = True
-        # TODO: MAKE GRID OBJECT, MAKE IT SO EVERYTHING WORKS WITH GRID
+
+        # [Music]
+        pygame.mixer.init()
+        channel1 = pygame.mixer.Channel(0)
+        ost = pygame.mixer.Sound("Assets/ting.wav")
+        # channel1.play(ost, -1)
+
+        # [User Interface]
+        # self.ui_manager = pygame_gui.UIManager(self.SIZE)
+
+        # [Object Init]
         self.maps = Tilemap(maps)
         self.background = Background(self.SIZE, "Assets/handpainted_07.png")
         self.cursor = Cursor(tile_map=self.maps.tile_map)
-        # self.player = Player("thief")
         self.player = Actor("Sandy", "thief", 5)
         self.player.move(self.cursor.pos)
 
     def run(self):
-        self.detik = 0
-        angka = 0
+        self.ticks = 0
         while self.running:
-            self.check_event()
-            self.background.render(self.window_surface)
+
+            self.game_input()
+
             self.cursor.offset([self.maps, self.player])
-            # time_delta = self.clock.tick(FPS)/1000.0
-            # self.ui_manager.update(time_delta)
-            # Render Window
+
+            # [Render Window]
+            self.background.render(self.window_surface)
             self.maps.render(self.window_surface)  # tilemap
             self.cursor.render(self.window_surface)
             self.player.render(self.window_surface)
-            label = self.fontM.render(
-                "TIME : "+str(self.detik), 1, (255, 255, 255), 1)
-            self.window_surface.blit(label, (20, 20))
-            # self.ui_manager.draw_ui(self.window_surface)
-            pygame.display.update()
-            self.clock.tick(FPS)
-            angka += 1
-            self.detik = int(angka / 10)
 
-    def check_event(self):
-        # event
+            # [UI]
+            label = self.fontM.render(
+                "TIME : "+str(self.time()), 1, (255, 255, 255), 1)
+            self.window_surface.blit(label, (20, 20))
+
+            pygame.display.update()
+
+            self.clock.tick(FPS)
+            self.ticks += 1
+
+    def time(self):
+        self.detik = int(self.ticks/FPS)
+        return self.detik
+
+    def game_input(self):
         for event in pygame.event.get():
-            # QUIT
+
+            # [Quit/Exit]
             if event.type == pygame.QUIT:
                 self.running = False
-            # Control
+
             if event.type == pygame.KEYDOWN:
+                # [Movement]
                 if event.key == pygame.K_LEFT:
                     self.cursor.move(left, up)
                 elif event.key == pygame.K_UP:
@@ -74,6 +90,7 @@ class Map:
                     self.cursor.move(left, down)
                 elif event.key == pygame.K_RIGHT:
                     self.cursor.move(right, down)
+                # [Control]
                 elif event.key == pygame.K_SPACE:
                     self.player.move(self.cursor.pos)
                 elif event.key == pygame.K_c:
@@ -90,7 +107,6 @@ class Map:
                     pygame.display.update()
                     while pause:
                         for event2 in pygame.event.get():
-                            # QUIT
                             if event2.type == pygame.QUIT:
                                 pause = False
                                 self.running = False
